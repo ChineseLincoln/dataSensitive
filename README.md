@@ -19,9 +19,9 @@
 
 ```xml
 <dependency>
-    <groupId>com.example</groupId>
-    <artifactId>sensitive-data-masker</artifactId>
-    <version>1.0.0</version>
+    <groupId>org.unreal.starter</groupId>
+    <artifactId>sensitive-starter</artifactId>
+    <version>1.0-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -114,6 +114,7 @@ public class User {
 ### 如何集成到现有项目？
 
 方案一、通过全局非侵入式配置，将脱敏规则配置在文件中，即可默认实现脱敏。
+
 方案二、少量配置或不配置脱敏规则，通过注解方式，进行属性脱敏
 
 ## 贡献
