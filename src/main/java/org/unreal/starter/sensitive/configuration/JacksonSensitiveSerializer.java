@@ -57,6 +57,7 @@ public class JacksonSensitiveSerializer extends JsonSerializer<String> {
             gen.writeString(sensitiveService.maskDataByFieldName(fieldName , fieldValue));
 
         }else{
+            Sensitive sensitive = objectClass.getAnnotation(Sensitive.class);
             log.debug("apply sensitive for {}, because @Sensitive is not null.", fieldName);
             gen.writeString(sensitiveService.maskDataByAnnotation(sensitive.strategy() , fieldValue));
         }
