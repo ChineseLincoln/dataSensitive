@@ -20,7 +20,7 @@ public class JacksonSensitiveSerializer extends JsonSerializer<String> {
 
     private static final Logger log = LoggerFactory.getLogger(JacksonSensitiveSerializer.class);
 
-    private SensitiveService sensitiveService;
+    private final SensitiveService sensitiveService;
 
     public JacksonSensitiveSerializer(SensitiveService sensitiveService) {
         this.sensitiveService = sensitiveService;
