@@ -2,6 +2,7 @@ package org.unreal.starter.sensitive.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +25,7 @@ public class SensitiveAutoConfiguration {
     }
 
     @Bean
+    @ConditionalOnBean(ObjectMapper.class)
     public ObjectMapper dataMaskingObjectMapper(SensitiveService sensitiveService) {
         ObjectMapper objectMapper = new ObjectMapper();
         SimpleModule module = new SimpleModule();
