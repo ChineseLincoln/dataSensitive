@@ -1,0 +1,5 @@
+data-masking:
+  rules:
+    - field: "test"
+      regex: "(.*?)(.{4})(.*)"
+      replacement: "$1****$3"
