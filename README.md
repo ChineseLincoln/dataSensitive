@@ -48,11 +48,13 @@ data-masking: # 掩码设置
 
 ```java
 public class User {
-    @Sensitive(type = SensitiveType.EMAIL)
+    @Sensitive(strategy = SensitiveStrategy.EMAIL)
     private String email;
 
-    @Sensitive(type = SensitiveType.PHONE)
+    @Sensitive(strategy = SensitiveStrategy.PHONE)
     private String phoneNumber;
+    
+    private String test;
 }
 ```
 
@@ -69,10 +71,13 @@ public class User {
 
     @Sensitive(type = SensitiveType.PHONE)
     private String phoneNumber = "18152484065";
+    
+    private String test = "testTest";
 
-    public User(String email, String phoneNumber) {
+    public User(String email, String phoneNumber, String test) {
         this.email = email;
         this.phoneNumber = phoneNumber;
+        this.test = test;
     }
 
     // Getters and Setters
@@ -91,13 +96,28 @@ public class User {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+    
+    public String getTest() {
+        this.test = test;
+    }
+    
+    public void setTest(String test) {
+        this.test = test;
+    }
 }
 ```
-假设SensitiveType.EMAIL和SensitiveType.PHONE的掩码规则分别是将邮箱的域名部分和电话号码的中间四位掩码处理，预期的JSON输出可能如下：
+假设SensitiveStrategy.EMAIL和SensitiveStrategy.PHONE的掩码规则分别是将邮箱的域名部分和电话号码的中间四位掩码处理，预期的JSON输出可能如下：
 ``` json
 {
-    "email": "example@****.com",
-    "phoneNumber": "181****4065"
+    "email": "*******@example.com",
+    "phoneNumber": "181****4065",
+}
+
+```
+假设属性test是通过全局非侵入式配置，将脱敏规则配置在文件中，预期的JSON输出可能如下：
+``` json
+{
+    "test": "****Test"
 }
 
 ```
