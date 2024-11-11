@@ -10,6 +10,8 @@ import java.lang.annotation.*;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.ANNOTATION_TYPE})
+@JacksonAnnotationsInside
+@JsonSerialize(using = JacksonSensitiveSerializer.class)
 public @interface Sensitive {
     SensitiveStrategy strategy() default SensitiveStrategy.MASK_ALL;
 }

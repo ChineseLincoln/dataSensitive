@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-org.unreal.starter.sensitive.configuration.SensitiveDataAutoConfiguration
+org.unreal.starter.sensitive.configuration.SensitiveAutoConfiguration,\
+org.unreal.starter.sensitive.configuration.JacksonConfig
