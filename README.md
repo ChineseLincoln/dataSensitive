@@ -1,4 +1,4 @@
-# 项目介绍和使用手册
+ **# 项目介绍和使用手册
 
 ## 项目介绍
 
@@ -32,6 +32,7 @@
 
 ```yaml
 data-masking: # 掩码设置
+  enabled: true # 开启   
   rules:  #规则 可以多条
     - field: "test" # 字段属性名称
       regex: "(.*?)(.{4})(.*)" # 正则表达式
@@ -48,11 +49,13 @@ data-masking: # 掩码设置
 
 ```java
 public class User {
-    @Sensitive(type = SensitiveType.EMAIL)
+    @Sensitive(strategy = SensitiveStrategy.EMAIL)
     private String email;
 
-    @Sensitive(type = SensitiveType.PHONE)
+    @Sensitive(strategy = SensitiveStrategy.PHONE)
     private String phoneNumber;
+    
+    private String test;
 }
 ```
 
@@ -69,10 +72,13 @@ public class User {
 
     @Sensitive(type = SensitiveType.PHONE)
     private String phoneNumber = "18152484065";
+    
+    private String test = "testTest";
 
-    public User(String email, String phoneNumber) {
+    public User(String email, String phoneNumber, String test) {
         this.email = email;
         this.phoneNumber = phoneNumber;
+        this.test = test;
     }
 
     // Getters and Setters
@@ -91,14 +97,54 @@ public class User {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+    
+    public String getTest() {
+        this.test = test;
+    }
+    
+    public void setTest(String test) {
+        this.test = test;
+    }
 }
 ```
-假设SensitiveType.EMAIL和SensitiveType.PHONE的掩码规则分别是将邮箱的域名部分和电话号码的中间四位掩码处理，预期的JSON输出可能如下：
+假设SensitiveStrategy.EMAIL和SensitiveStrategy.PHONE的掩码规则分别是将邮箱的域名部分和电话号码的中间四位掩码处理，预期的JSON输出可能如下：
 ``` json
 {
-    "email": "example@****.com",
-    "phoneNumber": "181****4065"
+    "email": "*******@example.com",
+    "phoneNumber": "181****4065",
 }
+
+```
+假设属性test是通过全局非侵入式配置，将脱敏规则配置在文件中，预期的JSON输出可能如下：
+``` json
+{
+    "test": "****Test"
+}
+
+```
+
+## springboot3.x 与 spring boot2.x
+
+springboot3.x支持的jdk最低版本为JDK17
+
+### springboot2.x
+
+```angular2html
+# spring boot2.x 使用
+META-INF/spring.factories
+
+#
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+org.unreal.starter.sensitive.configuration.SensitiveAutoConfiguration
+
+
+```
+
+### springboot3.x
+
+```angular2html
+# 3.0后使用
+META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports
 
 ```
 
@@ -126,4 +172,4 @@ public class User {
 该项目使用MIT许可证，详情请查看LICENSE文件。
 
 ## 警告
-当前项目尚未开发完毕，也未将项目发布到Maven中央仓库，请勿在生产环境中使用。
+当前项目尚未开发完毕，也未将项目发布到Maven中央仓库，请勿在生产环境中使用。** 
