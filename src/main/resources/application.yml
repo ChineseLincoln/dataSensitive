@@ -1,4 +1,5 @@
 data-masking:
+  enabled: true
   rules:
     - field: "test"
       regex: "(.*?)(.{4})(.*)"
