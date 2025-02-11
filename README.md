@@ -16,12 +16,14 @@
 ### 1. 引入依赖
 
 在你的`pom.xml`文件中添加以下依赖：
+尚未发布到中央仓库，心急的大家，可以直接编译这个项目，引入到项目中使用。
 
+中央仓库未来发布地址为
 ```xml
 <dependency>
-    <groupId>org.unreal.starter</groupId>
+    <groupId>io.leo.tool</groupId>
     <artifactId>sensitive-starter</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
 </dependency>
 ```
 
