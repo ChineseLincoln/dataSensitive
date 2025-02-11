@@ -21,7 +21,7 @@
 
 ```xml
 <dependency>
-    <groupId>io.leo.tool</groupId>
+    <groupId>io.github.lincoln-cn</groupId>
     <artifactId>sensitive-starter</artifactId>
     <version>1.0</version>
 </dependency>
