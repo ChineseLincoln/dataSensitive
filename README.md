@@ -172,6 +172,3 @@ META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports
 ## 许可证
 
 该项目使用MIT许可证，详情请查看LICENSE文件。
-
-## 警告
-当前项目尚未开发完毕，也未将项目发布到Maven中央仓库，请勿在生产环境中使用。** 
