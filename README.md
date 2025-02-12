@@ -12,18 +12,28 @@
 - 集成Jackson，自动对JSON序列化时进行数据掩码
 
 ## 使用手册
-尚未发布到中央仓库，心急的大家，可以直接编译这个项目，引入到项目中使用。
 
-### 1. 引入依赖（TODO）
+### 1. 引入依赖
 
 在你的`pom.xml`文件中添加以下依赖：
 
-
+JDK 1.8
 ```xml
 <dependency>
     <groupId>io.github.lincoln-cn</groupId>
     <artifactId>sensitive-starter</artifactId>
     <version>1.0</version>
+</dependency>
+```
+
+
+JDK 17
+```xml
+<dependency>
+    <groupId>io.github.lincoln-cn</groupId>
+    <artifactId>sensitive-starter</artifactId>
+    <version>1.0</version>
+    <classifier>jdk17</classifier>
 </dependency>
 ```
 
