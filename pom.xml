@@ -4,9 +4,22 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.unreal.starter</groupId>
+    <groupId>io.github.lincoln-cn</groupId>
     <artifactId>sensitive-starter</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
+
+    <developers>
+        <developer>
+            <id>lincoln</id>
+            <name>lincoln</name>
+            <email>sodlinken@gmail.com</email>
+            <roles>
+                <role>Project Manager</role>
+                <role>Architect</role>
+            </roles>
+        </developer>
+    </developers>
+
 
     <properties>
         <maven.compiler.source>22</maven.compiler.source>
@@ -17,7 +30,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.2</version>
+        <version>3.4.2</version>
     </parent>
     <dependencies>
         <dependency>
@@ -37,19 +50,162 @@
             <scope>compile</scope>
         </dependency>
     </dependencies>
-   
 
     <distributionManagement>
         <repository>
-            <id>private-repo</id>
-            <url>http://172.16.30.2:32767/repository/maven-releases/</url>
+            <uniqueVersion>false</uniqueVersion>
+            <id>mv-center</id>
+            <name>Corporate Repository</name>
+            <url>scp://repo/maven2</url>
+            <layout>default</layout>
         </repository>
-        <snapshotRepository>
-            <id>private-snapshots</id>
-            <url>http://172.16.30.2:32767/repository/maven-snapshots/</url>
-        </snapshotRepository>
     </distributionManagement>
+    <build>
+        <plugins>
+            <!--   central发布插件    -->
+            <plugin>
+                <groupId>org.sonatype.central</groupId>
+                <artifactId>central-publishing-maven-plugin</artifactId>
+                <version>0.7.0</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <publishingServerId>mv-center</publishingServerId>
+                    <tokenAuth>true</tokenAuth>
+                </configuration>
+            </plugin>
+            <!--   source源码插件 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.3.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--   javadoc插件 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.11.2</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.5</version>
+                <configuration>
+<!--                    <executable><CDATA>D:/Program Files/Git/usr/bin/gpg.exe</CDATA></executable>-->
+                    <keyname>Lincoln</keyname>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.4.2</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 
+    <repositories>
+        <repository>
+            <id>nexus-163</id>
+            <name>Nexus 163</name>
+            <url>http://mirrors.163.com/maven/repository/maven-public/</url>
+            <layout>default</layout>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>nexus-163</id>
+            <name>Nexus 163</name>
+            <url>http://mirrors.163.com/maven/repository/maven-public/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <profiles>
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <java.version>1.8</java.version>
+            </properties>
+        </profile>
+        <profile>
+            <id>jdk17</id>
+            <properties>
+                <java.version>17</java.version>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-jar-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                                <configuration>
+                                    <classifier>jdk17</classifier>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>

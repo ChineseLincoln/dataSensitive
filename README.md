@@ -1,3 +1,4 @@
+# 中文介绍 | [English Introduction](./README-EN.md)
 # 项目介绍和使用手册
 
 ## 项目介绍
