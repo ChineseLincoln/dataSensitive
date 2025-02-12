@@ -125,8 +125,9 @@ Assuming the test property is desensitized through global non-intrusive configur
 ## How to Customize Masking Rules?
 You can define custom masking rules in the configuration file, or implement the desensitization logic by adding it to the SensitiveStrategy enumeration class and using annotations on properties.
 ## How to Integrate into an Existing Project?
-Option 1: Use global non-intrusive configuration by setting desensitization rules in the file to achieve desensitization by default.
-Option 2: Configure a small number of desensitization rules or no desensitization rules, and use annotations for property desensitization.
+*Option 1*: Use global non-intrusive configuration by setting desensitization rules in the file to achieve desensitization by default.
+
+*Option 2*: Configure a small number of desensitization rules or no desensitization rules, and use annotations for property desensitization.
 # Contribution
 We welcome PRs and Issues to help us improve the project.
 # License
