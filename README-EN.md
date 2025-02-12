@@ -1,121 +1,135 @@
-# Project Introduction and User Manual
+English Introduction | [中文介绍](./README.md)
+Project Introduction and User Manual
+Project Introduction
+This project is a data desensitization tool, primarily used for masking sensitive data within Java applications. It is based on the Spring Boot framework and provides a series of annotations and configurations to simplify the handling of sensitive data.
+Serialization Tool Requirements
+The serialization framework must use the default Jackson framework of Spring Boot to be effective.
+Features
+Annotation Marking: Supports marking sensitive fields with annotations to simplify the handling of sensitive information in code.
+Custom Masking Rules: Allows users to define their own masking rules to meet different business needs.
+Supports defining masking rules via configuration files.
+Integrates with Jackson to automatically mask data during JSON serialization.
+User Manual
+1. Adding Dependencies
+   Add the following dependencies to your pom.xml file:
+   For JDK 1.8:
+   xml复制
+   <dependency>
+   <groupId>io.github.lincoln-cn</groupId>
+   <artifactId>sensitive-starter</artifactId>
+   <version>1.0</version>
+   </dependency>
+   For JDK 17:
+   xml复制
+   <dependency>
+   <groupId>io.github.lincoln-cn</groupId>
+   <artifactId>sensitive-starter</artifactId>
+   <version>1.0</version>
+   <classifier>jdk17</classifier>
+   </dependency>
+2. Non-Intrusive Configuration
+   Add desensitization rule configurations in application.properties or application.yml to non-intrusively desensitize property fields. This method will be effective globally in the project.
+   In the example, any property named test in any class will be desensitized after matching with a regular expression.
+   yaml复制
+   data-masking: # Masking settings
+   enabled: true # Enable
+   rules:  # Rules can be multiple
+    - field: "test" # Property field name
+      regex: "(.*?)(.{4})(.*)" # Regular expression
+      replacement: "$1****$3" # Structure after replacement
+      For Exceptions
+      Use the @IgnoreSensitive annotation in the code to comment on the property to skip the global desensitization configuration.
+3. Using Annotations
+   Mark the fields that need to be masked with the @Sensitive annotation in your Java class:
+   java复制
+   public class User {
+   @Sensitive(strategy = SensitiveStrategy.EMAIL)
+   private String email;
 
-## Project Introduction
+   @Sensitive(strategy = SensitiveStrategy.PHONE)
+   private String phoneNumber;
 
-This project is a tool for processing sensitive information in data, primarily used in Java applications to mask sensitive data. It is based on the Spring Boot framework and provides a series of annotations and configurations to simplify the handling of sensitive data.
-
-## Features
-
-- **Annotation-based Marking**: Supports marking sensitive fields with annotations to simplify the handling of sensitive information in code.
-- **Custom Masking Rules**: Allows users to define their own masking rules to meet different business requirements.
-- **Configuration File Support**: Supports defining masking rules through configuration files.
-- **Integration with Jackson**: Automatically masks data during JSON serialization.
-
-## User Manual
-
-### 1. Adding Dependencies
-
-Add the following dependencies to your `pom.xml` file:
-
-For JDK 1.8:
-```xml
-<dependency>
-    <groupId>io.github.lincoln-cn</groupId>
-    <artifactId>sensitive-starter</artifactId>
-    <version>1.0</version>
-</dependency>
-```
-
-For JDK 17:
-```xml
-<dependency>
-    <groupId>io.github.lincoln-cn</groupId>
-    <artifactId>sensitive-starter</artifactId>
-    <version>1.0</version>
-</dependency>
-```
-
-### 2. Using Annotations
-
-You can mark sensitive fields in your Java classes with custom annotations provided by this library. For example:
-
-```java
-import io.github.lincoln-cn.sensitive.annotation.Sensitive;
-import io.github.lincoln-cn.sensitive.enums.MaskStrategy;
+   private String test;
+   }
+   Example Code
+   Data Object
+   java复制
+   import com.example.sensitive.Sensitive;
+   import com.example.sensitive.SensitiveType;
+   import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class User {
-    @Sensitive(strategy = MaskStrategy.PARTIAL)
-    private String phoneNumber;
+@Sensitive(type = SensitiveType.EMAIL)
+private String email = "example@example.com";
 
-    @Sensitive(strategy = MaskStrategy.FULL)
-    private String idCardNumber;
+    @Sensitive(type = SensitiveType.PHONE)
+    private String phoneNumber = "18152484065";
+    
+    private String test = "testTest";
+
+    public User(String email, String phoneNumber, String test) {
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.test = test;
+    }
 
     // Getters and Setters
-}
-```
+    public String getEmail() {
+        return email;
+    }
 
-### 3. Custom Masking Rules
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-You can define your own masking rules by creating a custom strategy. For example:
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
 
-```java
-import io.github.lincoln-cn.sensitive.MaskStrategy;
-
-public class CustomMaskStrategy implements MaskStrategy {
-    @Override
-    public String mask(String input) {
-        if (input == null) {
-            return null;
-        }
-        return input.replaceAll(".", "*");
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+    
+    public String getTest() {
+        return test;
+    }
+    
+    public void setTest(String test) {
+        this.test = test;
     }
 }
-```
-
-Then, you can use this custom strategy in your annotations:
-
-```java
-@Sensitive(strategy = CustomMaskStrategy.class)
-private String customSensitiveField;
-```
-
-### 4. Configuration File
-
-You can also define masking rules in a configuration file. For example, in your `application.yml`:
-
-```yaml
-sensitive:
-  rules:
-    - field: phoneNumber
-      strategy: PARTIAL
-    - field: idCardNumber
-      strategy: FULL
-```
-
-### 5. Integration with Jackson
-
-When serializing objects to JSON, the library will automatically apply the masking rules defined through annotations or configuration files. For example:
-
-```java
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-public class Main {
-    public static void main(String[] args) throws Exception {
-        User user = new User();
-        user.setPhoneNumber("1234567890");
-        user.setIdCardNumber("123456789012345678");
-
-        ObjectMapper mapper = new ObjectMapper();
-        String json = mapper.writeValueAsString(user);
-        System.out.println(json);
-    }
+Assuming the masking rules for SensitiveStrategy.EMAIL and SensitiveStrategy.PHONE are to mask the domain part of the email and the middle four digits of the phone number, respectively, the expected JSON output might be:
+JSON复制
+{
+"email": "*******@example.com",
+"phoneNumber": "181****4065"
 }
-```
+Assuming the test property is desensitized through global non-intrusive configuration by setting the desensitization rules in the file, the expected JSON output might be:
+JSON复制
+{
+"test": "****Test"
+}
+Spring Boot 3.x and Spring Boot 2.x
+The minimum JDK version supported by Spring Boot 3.x is JDK 17.
+Spring Boot 2.x
+angular2html复制
+# For Spring Boot 2.x
+META-INF/spring.factories
 
-This will output a JSON string with the sensitive fields masked according to the defined rules.
-
-### 6. Additional Notes
-
-- **Version Compatibility**: Ensure that the version of the `sensitive-starter` dependency matches your project's requirements.
-- **Performance Considerations**: Masking operations may introduce some performance overhead. Test thoroughly in your environment to ensure it meets your performance needs.
-
+#
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+org.unreal.starter.sensitive.configuration.SensitiveAutoConfiguration
+Spring Boot 3.x
+angular2html复制
+# For versions after 3.0
+META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports
+FAQs
+How to Customize Masking Rules?
+You can define custom masking rules in the configuration file, or implement the desensitization logic by adding it to the SensitiveStrategy enumeration class and using annotations on properties.
+How to Integrate into an Existing Project?
+Option 1: Use global non-intrusive configuration by setting desensitization rules in the file to achieve desensitization by default.
+Option 2: Configure a small number of desensitization rules or no desensitization rules, and use annotations for property desensitization.
+Contribution
+We welcome PRs and Issues to help us improve the project.
+License
+This project is licensed under the MIT license. For more details, please refer to the LICENSE file.
