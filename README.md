@@ -18,11 +18,23 @@
 
 在你的`pom.xml`文件中添加以下依赖：
 
+JDK 1.8
 ```xml
 <dependency>
-    <groupId>org.unreal.starter</groupId>
+    <groupId>io.github.lincoln-cn</groupId>
     <artifactId>sensitive-starter</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
+</dependency>
+```
+
+
+JDK 17
+```xml
+<dependency>
+    <groupId>io.github.lincoln-cn</groupId>
+    <artifactId>sensitive-starter</artifactId>
+    <version>1.0</version>
+    <classifier>jdk17</classifier>
 </dependency>
 ```
 
@@ -171,6 +183,3 @@ META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports
 ## 许可证
 
 该项目使用MIT许可证，详情请查看LICENSE文件。
-
-## 警告
-当前项目尚未开发完毕，也未将项目发布到Maven中央仓库，请勿在生产环境中使用。** 
